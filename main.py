@@ -19,7 +19,7 @@ from aiogram.utils.markdown import hbold
 router = Router()
 
 @router.message()
-async def command_start_handler(message: Message) -> Any:
+async def command_start_handler(message: Message) -> any:
     print(API_TOKEN)
     await message.answer(f"Hello!")
 
