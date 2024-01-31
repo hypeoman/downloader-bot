@@ -23,3 +23,4 @@ async def command_start_handler(message: Message) -> Any:
     print(API_TOKEN)
     await message.answer(f"Hello!")
 
+#pipisi
