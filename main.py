@@ -36,6 +36,7 @@ def get_youtube_video(url) -> str:
         path = f"{youtubeObject.title}.mp4"
         logging.info(f"Filepath got correctly: {path}")
 
+
         return path
     except:
         logging.error("An error has occured while downloading youtube video.")
@@ -56,8 +57,10 @@ async def url_handler(message: types.Message):
 
         try:
             filepath = get_youtube_video(url)
-            video_to_send = FSInputFile(filepath)
+
+            video_to_send = FSInputFile(str(filepath))
             await message.answer_video(video_to_send)
+            logging.info('Video is completed send.')
         except:
             try:
                 get_tiktok_video(url)
