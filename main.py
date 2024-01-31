@@ -16,11 +16,20 @@ from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
 #! # All handlers should be attached to the Dispatcher
-router = Router()
+dp = Dispatcher()
 
-@router.message()
-async def command_start_handler(message: Message) -> Any:
-    print(API_TOKEN)
+print(API_TOKEN)
+
+@dp.message()
+async def message_handler(message: types.Message):
     await message.answer(f"Hello!")
 
-#pipisi
+async def main() -> None:
+    # Initialize Bot instance with a default parse mode which will be passed to all API calls
+    bot = Bot(API_TOKEN, parse_mode=ParseMode.HTML)
+    # And the run events dispatching
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    asyncio.run(main())
