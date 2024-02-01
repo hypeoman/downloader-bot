@@ -5,7 +5,6 @@ from aiogram.enums import ParseMode
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram import F
 from aiogram.types import FSInputFile
-from pytube import YouTube
 from aiogram.types import URLInputFile
 import yt_dlp
 import json
