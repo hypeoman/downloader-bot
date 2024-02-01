@@ -40,26 +40,9 @@ def get_youtube_video(url, output_dir):
         except yt_dlp.utils.DownloadError as e:
             logging.error("Download error:" + str(e))
 
-# TODO: Write this function
-
-
-def get_reels_video() -> None:
-
-    pass
-
 # * Url handler
-
-
 @dp.message()
 async def url_handler(message: types.Message):
-    # * This hadnler try get videos from:
-    # 1. youtube (with shorts);
-    # 2. tiktok;
-    # 3. reels;
-    # ? 4. pinterest
-    # ? 5. vk
-    # ? likee
-
     try:
         url = message.text
 
@@ -68,41 +51,22 @@ async def url_handler(message: types.Message):
             video_to_send = FSInputFile(filepath)
             await message.answer_video(video_to_send)
             os.remove(filepath)
-        except:
-            try:
-                pass
-            except:
-                try:
-                    get_reels_video(url)
-                except:
-                    pass
     except:
-        pass
+        await message.answer(f'Error downloading video')
 
 # TODO
-
-
 def translate_to_selected_language(text) -> str:
     pass
 
-# * /start command handler
-
-
+# TODO /start command handler
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
     """
-    # Most event objects have aliases for API methods that can be called in events' context
-    # For example if you want to answer to incoming message you can use `message.answer(...)` alias
-    # and the target chat will be passed to :ref:`aiogram.methods.send_message.SendMessage`
-    # method automatically or call API method directly via
-    # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
     await message.answer(f"Hello, I can download videos from tiktok, youtube, youtube shorts and reels!")
 
 # * Main function
-
-
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
     bot = Bot(API_TOKEN, parse_mode=ParseMode.HTML)
