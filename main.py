@@ -99,4 +99,4 @@ async def main() -> None:
 #! Start program via main function
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(main())
+    asyncio.run(main())     
