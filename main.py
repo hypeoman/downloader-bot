@@ -23,10 +23,6 @@ API_TOKEN = config["API"]["TOKEN"]
 #* All handlers should be attached to the Dispatcher
 dp = Dispatcher()
 
-# TODO: Write this function
-def get_tiktok_video() -> None:
-    pass
-
 #* function to get video from youtube
 def get_youtube_video(url, output_dir):    
     ydl_opts = {
@@ -69,7 +65,7 @@ async def url_handler(message: types.Message):
             os.remove(filepath)
         except:
             try:
-                get_tiktok_video(url)
+                pass
             except:
                 try:
                     get_reels_video(url)
@@ -105,5 +101,5 @@ async def main() -> None:
 #* Start program via main function
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+
     asyncio.run(main())     
