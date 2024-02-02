@@ -68,7 +68,8 @@ async def command_start_handler(message: Message) -> None:
     This handler receives messages with `/start` command
     """
     await message.answer(f"Hello, I can download videos from tiktok, youtube and many other platforms. \n"
-                         + "The full list can be found at this link: \n")
+                         + "The full list can be found at this link: \n"
+                         + "Select your language using the buttons below:")
 
 # * Main function
 async def main() -> None:
