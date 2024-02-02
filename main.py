@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, Router, types
 from aiogram import F
 from aiogram.types import FSInputFile
 from aiogram.types import URLInputFile
+import mysql.connector
 import yt_dlp
 import json
 import sys
