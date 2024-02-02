@@ -42,7 +42,7 @@ def get_youtube_video(url, output_dir):
             logging.error("Download error:" + str(e))
 
 # * Url handler
-@dp.message()
+@dp.message(F.text.startswith("https"))
 async def url_handler(message: types.Message):
     try:
         url = message.text
@@ -67,7 +67,8 @@ async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
     """
-    await message.answer(f"Hello, I can download videos from tiktok, youtube, youtube shorts and reels!")
+    await message.answer(f"Hello, I can download videos from tiktok, youtube and many other platforms. \n" +
+                         + "The full list can be found at this link: \n")
 
 # * Main function
 async def main() -> None:
