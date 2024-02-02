@@ -51,6 +51,8 @@ async def url_handler(message: types.Message):
             video_to_send = FSInputFile(filepath)
             await message.answer_video(video_to_send)
             os.remove(filepath)
+        except:
+            pass
     except:
         await message.answer(f'Error downloading video')
 
