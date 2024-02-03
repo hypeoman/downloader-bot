@@ -6,9 +6,10 @@ from aiogram import Bot, Dispatcher, Router, types
 from aiogram import F
 from aiogram.types import FSInputFile
 from aiogram.types import URLInputFile
+from requests import get
+from json import loads
 import mysql.connector
 import yt_dlp
-import json
 import sys
 import logging
 import asyncio
@@ -25,7 +26,7 @@ API_TOKEN = config["API"]["TOKEN"]
 dp = Dispatcher()
 
 
-# * function to get video from youtube
+# * function to get video (not from inst)
 def get_youtube_video(url, output_dir):
     ydl_opts = {
         'format': 'best',
@@ -41,6 +42,10 @@ def get_youtube_video(url, output_dir):
         except yt_dlp.utils.DownloadError as e:
             logging.error("Download error:" + str(e))
 
+# * function to get video from inst
+def get_instagram_video(url, output_dir):
+    SESSIONID = 1
+
 # * Url handler
 @dp.message(F.text.startswith("https"))
 async def url_handler(message: types.Message):
@@ -49,6 +54,22 @@ async def url_handler(message: types.Message):
 
         try:
             filepath = get_youtube_video(url, os.getcwd())
+            video_to_send = FSInputFile(filepath)
+            await message.answer_video(video_to_send)
+            os.remove(filepath)
+        except:
+            pass
+    except:
+        await message.answer(f'Error downloading video')
+
+#* Instagram url handler
+@dp.message(F.text.startswith("https").contains("instagram.com"))
+async def instagram_url_handler(message: types.Message):
+    try:
+        url = message.text
+        
+        try:
+            filepath = get_instagram_video(url, os.getcwd())
             video_to_send = FSInputFile(filepath)
             await message.answer_video(video_to_send)
             os.remove(filepath)
