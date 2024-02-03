@@ -10,6 +10,7 @@ from requests import get
 from json import loads
 import mysql.connector
 import yt_dlp
+from instascrape import Reel
 import sys
 import logging
 import asyncio
@@ -44,7 +45,19 @@ def get_youtube_video(url, output_dir):
 
 # * function to get video from inst
 def get_instagram_video(url, output_dir):
-    SESSIONID = 1
+    SESSIONID = '485621582%3A4iz8WHyWLCZA7Q%3A17%3AAYeY9XLBVsZkeNxGKybsKzObchINgaMZvkuA2cYj9A'
+    try:
+        headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)\
+        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 \
+        Safari/537.36 Edg/79.0.309.43",
+        "cookie": f'sessionid={SESSIONID};'
+        }
+        insta_reel = Reel(url)
+        insta_reel.scrape(headers=headers)
+        insta_reel.download(fp=output_dir)
+    except Exception as e :
+        logging.error('Download error:', + str(e))
 
 # * Url handler
 @dp.message(F.text.startswith("https"))
