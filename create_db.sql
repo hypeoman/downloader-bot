@@ -1,0 +1,8 @@
+DROP DATABASE IF EXISTS DownloaderBot;
+CREATE DATABASE IF NOT EXISTS DownloaderBot;
+
+CREATE TABLE Users(
+User_IDPK INT PRIMARY KEY AUTO_INCREMENT,
+User_Language ENUM('English', 'Russian') NOT NULL,
+Subscription TINYINT NOT NULL
+);

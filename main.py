@@ -6,8 +6,10 @@ from aiogram import Bot, Dispatcher, Router, types
 from aiogram import F
 from aiogram.types import FSInputFile
 from aiogram.types import URLInputFile
+from requests import get
+from json import loads
+import mysql.connector
 import yt_dlp
-import json
 import sys
 import logging
 import asyncio
@@ -24,7 +26,7 @@ API_TOKEN = config["API"]["TOKEN"]
 dp = Dispatcher()
 
 
-# * function to get video from youtube
+# * function to get video (not from inst)
 def get_youtube_video(url, output_dir):
     ydl_opts = {
         'format': 'best',
@@ -40,26 +42,13 @@ def get_youtube_video(url, output_dir):
         except yt_dlp.utils.DownloadError as e:
             logging.error("Download error:" + str(e))
 
-# TODO: Write this function
-
-
-def get_reels_video() -> None:
-#485621582%3A4iz8WHyWLCZA7Q%3A17%3AAYeY9XLBVsZkeNxGKybsKzObchINgaMZvkuA2cYj9A
-    pass
+# * function to get video from inst
+def get_instagram_video(url, output_dir):
+    SESSIONID = 1
 
 # * Url handler
-
-
-@dp.message()
+@dp.message(F.text.startswith("https"))
 async def url_handler(message: types.Message):
-    # * This hadnler try get videos from:
-    # 1. youtube (with shorts);
-    # 2. tiktok;
-    # 3. reels;
-    # ? 4. pinterest
-    # ? 5. vk
-    # ? likee
-
     try:
         url = message.text
 
@@ -69,40 +58,41 @@ async def url_handler(message: types.Message):
             await message.answer_video(video_to_send)
             os.remove(filepath)
         except:
-            try:
-                pass
-            except:
-                try:
-                    get_reels_video(url)
-                except:
-                    pass
+            pass
     except:
-        pass
+        await message.answer(f'Error downloading video')
+
+#* Instagram url handler
+@dp.message(F.text.startswith("https").contains("instagram.com"))
+async def instagram_url_handler(message: types.Message):
+    try:
+        url = message.text
+        
+        try:
+            filepath = get_instagram_video(url, os.getcwd())
+            video_to_send = FSInputFile(filepath)
+            await message.answer_video(video_to_send)
+            os.remove(filepath)
+        except:
+            pass
+    except:
+        await message.answer(f'Error downloading video')
 
 # TODO
-
-
 def translate_to_selected_language(text) -> str:
     pass
 
-# * /start command handler
-
-
+# TODO /start command handler
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
     """
-    # Most event objects have aliases for API methods that can be called in events' context
-    # For example if you want to answer to incoming message you can use `message.answer(...)` alias
-    # and the target chat will be passed to :ref:`aiogram.methods.send_message.SendMessage`
-    # method automatically or call API method directly via
-    # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
-    await message.answer(f"Hello, I can download videos from tiktok, youtube, youtube shorts and reels!")
+    await message.answer(f"Hello, I can download videos from tiktok, youtube and many other platforms. \n"
+                         + "The full list can be found at this link: \n"
+                         + "Select your language using the buttons below:")
 
 # * Main function
-
-
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
     bot = Bot(API_TOKEN, parse_mode=ParseMode.HTML)
