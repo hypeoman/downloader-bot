@@ -20,17 +20,18 @@ config.read("config.ini")
 API_TOKEN = config["API"]["TOKEN"]
 
 
-#* All handlers should be attached to the Dispatcher
+# * All handlers should be attached to the Dispatcher
 dp = Dispatcher()
 
-#* function to get video from youtube
-def get_youtube_video(url, output_dir):    
+
+# * function to get video from youtube
+def get_youtube_video(url, output_dir):
     ydl_opts = {
-        'format' : 'best',
-        'outtmp' : os.path.join(output_dir, '%(title)s.%(ext)s'),
-        'restrict-filenames' : True,
-        'max_filesize' : 350 * 1024 * 1024,
-        'max_duration' : 1800
+        'format': 'best',
+        'outtmp': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'restrict-filenames': True,
+        'max_filesize': 350 * 1024 * 1024,
+        'max_duration': 1800
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
@@ -38,22 +39,26 @@ def get_youtube_video(url, output_dir):
             return os.path.join(output_dir, ydl.prepare_filename(info))
         except yt_dlp.utils.DownloadError as e:
             logging.error("Download error:" + str(e))
-        
+
 # TODO: Write this function
+
+
 def get_reels_video() -> None:
 
     pass
 
-#* Url handler
+# * Url handler
+
+
 @dp.message()
 async def url_handler(message: types.Message):
-    #* This hadnler try get videos from:
+    # * This hadnler try get videos from:
     # 1. youtube (with shorts);
     # 2. tiktok;
     # 3. reels;
-    #? 4. pinterest
-    #? 5. vk
-    #? likee
+    # ? 4. pinterest
+    # ? 5. vk
+    # ? likee
 
     try:
         url = message.text
@@ -75,10 +80,14 @@ async def url_handler(message: types.Message):
         pass
 
 # TODO
+
+
 def translate_to_selected_language(text) -> str:
     pass
 
-#* /start command handler
+# * /start command handler
+
+
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
@@ -91,14 +100,16 @@ async def command_start_handler(message: Message) -> None:
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
     await message.answer(f"Hello, I can download videos from tiktok, youtube, youtube shorts and reels!")
 
-#* Main function
+# * Main function
+
+
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
     bot = Bot(API_TOKEN, parse_mode=ParseMode.HTML)
     # And the run events dispatching
     await dp.start_polling(bot)
 
-#* Start program via main function
+# * Start program via main function
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
